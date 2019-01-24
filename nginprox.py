@@ -3,12 +3,12 @@ import os
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('I', help='IP to be proxy to (e.g. "example.com" / "192.168.1.2:7070" )')
+parser.add_argument('proxy', help='IP to proxy to (e.g. "example.com" / "192.168.1.2" )')
 args = parser.parse_args()
-if not args.I.startswith('http://'):  # use the first parameter as the ip
-    ip = 'http://' + args.I
+if not args.proxy.startswith('http://'):  # use the first parameter as the ip
+    ip = 'http://' + args.proxy
 else:
-    ip = args.I
+    ip = args.proxy
 cwd = os.getcwd()  # get current working directory
 pPath = ''  # path to proxy to
 print("Creating nginx.conf file")
