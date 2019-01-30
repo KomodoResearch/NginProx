@@ -29,6 +29,18 @@ def ngn_install():
     return
 
 
+def ngn_bind_port():
+    restart = "sudo systemctl restart nginx".split()  # restart nginx command
+    default_in = open("/etc/nginx/sites-enabled/default", 'rt').read()  # read the default configuration
+    default_in = default_in.replace("listen 80", "listen 8888", 1)  # replace the first appearance of the ipv4 port bind
+    default_in = default_in.replace("listen [::]:80", "listen [::]:8888",
+                                  1)  # replace the first appearance of the ipv6 port bind
+    default_out = open("/etc/nginx/sites-enabled/default", 'wt')  # temp file with new settings
+    default_out.write(default_in)  # wrtite tmp file to real file
+    default_out.close()
+    subprocess.Popen(restart, stdout=subprocess.PIPE)  # restart nginx
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument('-p', '--proxy', default='http://127.0.0.1', help='IP to proxy to (e.g. "example.com" / '
                                                                       '"192.168.1.2" ) on default using localhost')
