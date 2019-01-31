@@ -2,10 +2,11 @@ import os
 # import sys
 import argparse
 import subprocess
+import re
 
 
 def ngn_check():
-    """checks for nginx on the system True if installed"""
+    """checks for nginx on the system, True if installed"""
     systemctl = 'systemctl -l --type service --all'.split()  # command to list all services on the device
     grep = 'grep nginx'.split()  # command to grep for nginx
     systemctl_process = subprocess.Popen(systemctl, stdout=subprocess.PIPE)  # run the systemctl command
@@ -20,6 +21,7 @@ def ngn_check():
 
 
 def ngn_install():
+    """installs the nginx service"""
     apt_get_update = 'sudo apt-get update'.split()
     apt_get_install = 'sudo apt-get -y install nginx'.split()
     update_process = subprocess.Popen(apt_get_update, stdout=subprocess.PIPE)
@@ -29,14 +31,16 @@ def ngn_install():
     return
 
 
-def ngn_bind_port():
+def ngn_bind_port(port="8888"):
+    """Changes the nginx port to port supplied (8888 by default)"""
     restart = "sudo systemctl restart nginx".split()  # restart nginx command
     default_in = open("/etc/nginx/sites-enabled/default", 'rt').read()  # read the default configuration
-    default_in = default_in.replace("listen 80", "listen 8888", 1)  # replace the first appearance of the ipv4 port bind
-    default_in = default_in.replace("listen [::]:80", "listen [::]:8888",
-                                  1)  # replace the first appearance of the ipv6 port bind
+    default_in = re.sub('listen ([0-9]){1,5}', 'listen {0}'.format(port), default_in, count=1)  # replace the first
+    # appearance of the ipv4 port bind
+    default_in = re.sub("listen \[::\]:([0-9]){1,5}", 'listen [::]:{0}'.format(port), default_in, count=1)  # replace
+    # the first appearance of the ipv6 port bind
     default_out = open("/etc/nginx/sites-enabled/default", 'wt')  # temp file with new settings
-    default_out.write(default_in)  # wrtite tmp file to real file
+    default_out.write(default_in)  # write tmp file to real file
     default_out.close()
     subprocess.Popen(restart, stdout=subprocess.PIPE)  # restart nginx
 
@@ -62,6 +66,7 @@ if args.install:
         ngn_install()
     else:
         input("Nginx already installed, press enter to create .conf file and attach it to existing nginx installation")
+    ngn_bind_port()  # change port to 8888 on default so nginx wont crash when clashing with existing web server
 pPath = ''  # path to proxy to
 print("Creating nginx.conf file")
 conf = open('nginx.conf', 'w+')  # create the .conf file
@@ -86,6 +91,7 @@ print("Appending a 'catch-all'")
 # catch all, throw to 404
 conf.write('\t\tlocation ~* .*$ {{\n\t\t\trewrite .* /404 break;\n\t\t\tproxy_pass {0};\n\t\t}}\n'.format(ip))
 conf.write("\t}\n}")  # end the http and server open brackets
+if args.install:
+    print("copying .conf file to nginx directory")
+    subprocess.Popen("sudo cp nginx.conf /etc/nginx/nginx.conf".split(), stdout=subprocess.PIPE)
 print("finished :)")
-
-
