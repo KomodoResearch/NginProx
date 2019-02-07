@@ -53,7 +53,7 @@ def argparser():
     parser.add_argument('-r', '--root-folder', default=os.getcwd(), help="Specify the web-server's root directory (e.g "
                                                                          "/var/www/html), by default using current "
                                                                          "directory")
-    parser.add_argument('-i', '--install', action='store_true', help="Use -I to install the nginx and set it up with "
+    parser.add_argument('-i', '--install', action='store_true', help="Use -i to install the nginx and set it up with "
                                                                      "reverse proxy")
     return_args = parser.parse_args()
     return return_args
@@ -92,7 +92,7 @@ def proxy_dedicator(output, ip, cwd):
 
 def main():
     args = argparser()
-    if not args.proxy.startswith('http://'):  # use the first parameter as the ip
+    if not args.proxy.startswith('http://'):  # use the first parameter as the ip and check for 'http://'
         ip = 'http://' + args.proxy
     else:
         ip = args.proxy
@@ -109,6 +109,8 @@ def main():
     print("Creating nginx.conf file")
     conf = open('nginx.conf', 'w+')
     write_defaults(conf)
+    if args.install:
+        conf.write("\t\tlisten 8888;\n")
     proxy_dedicator(conf, ip, cwd)
     if args.install:
         print("copying .conf file to nginx directory")
