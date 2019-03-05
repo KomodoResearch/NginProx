@@ -95,7 +95,7 @@ This will create the `nginx.conf` file, install the nginx service and place the 
 - [ ] Logging
 - [ ] Reading existing rewrite rules
 
-## Powered By [Komodo security](http://komodosec.com)
+## Powered By [Komodo Consulting](http://komodosec.com)
 <p align="center">
   <img src="https://www.komodosec.com/wp-content/uploads/2016/05/komodologo.png" width=350/>
 </p>
