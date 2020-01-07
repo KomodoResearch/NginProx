@@ -17,7 +17,7 @@ is requested, and in the configuration contains the following rules:
 location = /help/* {
   proxy_pass http://real.server.com/help/main-page;
      }
-location = /help/contect-us {
+location = /help/contact-us {
   proxy_pass http://real.server.com/help/contact-us;
      }
 ```
