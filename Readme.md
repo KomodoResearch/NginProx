@@ -44,7 +44,7 @@ Following the theory we create a configuration file with the following structure
 
 ### Issues
 
-If the theory is correct we potentially found an end to all web shells, right? well things are a bit more complicated then simple sites with URLs pointing to files on the server.
+If the theory is correct we potentially found an end to all web shells, right? well things are a bit more complicated than simple sites with URLs pointing to files on the server.
 
 In the real world most web applications make use of rewrite rules to interact with dynamic pages. So the solution has to take that into account and potentially read  the web-server's config file and create proxy rules that match.
 
