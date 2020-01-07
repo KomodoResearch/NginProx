@@ -10,7 +10,7 @@ Nginx's reverse proxy works by reading a configuration file with proxy rules and
 These rules are read from top to Bottom and the most specific rule is chosen.
 So if
 ```
-example.com/help/contect-us
+example.com/help/contact-us
 ```
 is requested, and in the configuration contains the following rules:
 ```
@@ -18,10 +18,10 @@ location = /help/* {
   proxy_pass http://real.server.com/help/main-page;
      }
 location = /help/contect-us {
-  proxy_pass http://real.server.com/help/contect-us;
+  proxy_pass http://real.server.com/help/contact-us;
      }
 ```
-The request will be directed to `http://real.server.com/help/contect-us`
+The request will be directed to `http://real.server.com/help/contact-us`
 
 Using this feature we can create a configuration file on a reverse proxy server that specifically points to every page on the original server. In order to allow users to access uploaded files we can implement a rule with whitelisted file extensions using regex. And send the rest to a generic "404" page.
 
@@ -40,7 +40,7 @@ Following the theory we create a configuration file with the following structure
 
 ### This is a PoC
 
-This is by all means a Proof of Concept. Don't use this project to increase the security of your web application (it will probably break it).
+**This is by all means a Proof of Concept. Don't use this project to increase the security of your web application (it will probably break it).**
 
 ### Issues
 
@@ -56,7 +56,7 @@ In its current state Nginprox only works for _"simple"_ website that don't imple
 currently two use cases are supported:
 
 1. Having a separate reverse proxy dedicated server.
-2. self "reverse proxy" where the original server will only be open to requests from and Nginx will redirect to localhost
+2. Self "reverse proxy" where the original server will only be open to requests from and Nginx will redirect to localhost
 
 #### Prerequisites
 
@@ -95,7 +95,7 @@ This will create the `nginx.conf` file, install the nginx service and place the 
 - [ ] Logging
 - [ ] Reading existing rewrite rules
 
-## Powered By [Komodo Consulting](http://komodosec.com)
+## Powered By [Komodo Consulting](https://www.komodosec.com)
 <p align="center">
   <img src="https://www.komodosec.com/wp-content/uploads/2016/05/komodologo.png" width=350/>
 </p>
